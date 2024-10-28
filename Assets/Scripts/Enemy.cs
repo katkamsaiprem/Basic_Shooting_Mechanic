@@ -1,4 +1,5 @@
 
+using System;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -13,7 +14,7 @@ public class Enemy : MonoBehaviour
     
     private Shooting shootingScript;
 
-    public void Damage(int damage)
+   /* public void Damage(int damage)
     {
         Health -= damage;
         if (Health <= 0)
@@ -21,7 +22,9 @@ public class Enemy : MonoBehaviour
             shootingScript.EnemyDestroyed();
             Destroy(this.gameObject);
         }
-    }
+    }*/
+
+     
 
     void Start()
     {
@@ -31,13 +34,36 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if (Vector3.Distance(transform.position, player.position) > stoppingDistance)
+       EnemyMovement();
+    }
+
+    public void EnemyMovement()
+    {
+              if (Vector3.Distance(transform.position, player.position) > stoppingDistance)
+              {
+                  transform.position = Vector3.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
+              }
+              else if (Vector3.Distance(transform.position, player.position) < retreatDistance)
+              {
+                  transform.position = Vector3.MoveTowards(transform.position, player.position, -moveSpeed * Time.deltaTime);
+              }
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.CompareTag("Bullet"))
         {
-            transform.position = Vector3.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
+            
+            Health -= 2;
+            if (Health <= 0)
+            {
+                shootingScript.EnemyDestroyed();
+                Destroy(this.gameObject);
+            }
         }
-        else if (Vector3.Distance(transform.position, player.position) < retreatDistance)
+        if (other.tag == "Player")
         {
-            transform.position = Vector3.MoveTowards(transform.position, player.position, -moveSpeed * Time.deltaTime);
+            Debug.Log("Game Over");
         }
     }
+    
 }

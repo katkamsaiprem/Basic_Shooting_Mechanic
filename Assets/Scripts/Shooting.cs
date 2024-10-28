@@ -6,15 +6,20 @@ public class Shooting : MonoBehaviour
 {
     
 
-    public Transform fireingPoint;
-
+    /*public Transform fireingPoint;
     public GameObject fire;
     public GameObject hitPoint;
-    public GameObject enemyPrefab; 
-    public int numberOfEnemies = 5; 
+    */
+    public int numberOfEnemies = 10; 
     public float spawnRange = 10f; // Range within which to spawn enemies
-    
+     public GameObject enemyPrefab;
     private int activeEnemies;
+
+    #region instantiating bullets variables
+    public GameObject bulletPrefab;
+    public GameObject FirePosition;
+
+    #endregion
      void Start()
         {
             SpawnEnemies();
@@ -29,7 +34,8 @@ public class Shooting : MonoBehaviour
 
     public void ShootingBullets()
     {
-        // Define raycast
+        #region shooting logic with raycast
+        /*// Define raycast
         RaycastHit hit;
 
         // Define the direction of the raycast
@@ -56,11 +62,19 @@ public class Shooting : MonoBehaviour
         }
         //using raycast get enemy information
         Enemy enemy = hit.transform.GetComponent<Enemy>();//take the enemy script
+      
 
         if (enemy != null)
         {
             enemy.Damage(2);
-        }
+        }*/ 
+        #endregion
+
+        #region shooting logic with instantiating bullets
+        Instantiate(bulletPrefab, FirePosition.transform.position, FirePosition.transform.rotation);
+        
+        
+        #endregion
 
     }
     void SpawnEnemies()
@@ -83,7 +97,7 @@ public class Shooting : MonoBehaviour
         activeEnemies--;
         if (activeEnemies <= 0)
         {
-            Debug.Log("Game Over");
+            Debug.Log("Won");
         }
     }
 }
